@@ -1,6 +1,9 @@
 package com.example.notifications
 
-//test git other branch
+//test testingbranch from testingbranch
+
+//test git other branch from master
+
 // change here test git
 import android.os.Bundle
 import android.view.Menu
