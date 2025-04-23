@@ -1,0 +1,29 @@
+<!-- res/layout/dialog_mark_all_read.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <!-- Checkbox to ask for not asking again -->
+    <CheckBox
+        android:id="@+id/dontAskAgainCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Don't ask again" />
+
+    <!-- Mark All Button with Tick Icon -->
+    <Button
+        android:id="@+id/markAllButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mark All as Read" />
+
+    <!-- Cancel Button -->
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel" />
+
+</LinearLayout>

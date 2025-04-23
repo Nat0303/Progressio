@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Your App</string>
+    <string name="notifications_title">Notifications</string>
+    <string name="tab_all">All</string>
+    <string name="tab_unread">Unread</string>
+    <string name="mark_all_read">Mark all as read</string>
+    <string name="mark_all_read_confirmation">Are you sure you want to mark all notifications as read?</string>
+    <string name="dont_ask_again">Don\'t ask me again</string>
+    <string name="cancel">CANCEL</string>
+    <string name="mark_all">MARK ALL AS READ</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="notifications_list_desc">List of notifications</string>
+    <string name="home">Home</string>
+    <string name="title_tasks">Tasks</string>
+    <string name="notifications">Notifications</string>
+    <string name="title_profile">Profile</string>
+    <string name="back">Back</string>
+    <string name="title_history">History</string>
+    <string name="mark_as_read">Mark as Read</string>
+
+
+
+</resources>
