@@ -8,7 +8,7 @@ import com.example.notifications.ui.theme.models.Notification
 
 class NotificationViewModel(private val sharedPreferences: SharedPreferences) : ViewModel() {
 
-    private val allNotifications = listOf(
+    private var allNotifications = mutableListOf(
         Notification("1", "Task 1", "New task assigned", "2 Feb", false, "task1"),
         Notification("2", "Task 1", "Task submitted", "3 Feb", false, "task1"),
         Notification("3", "Task 1", "Task approved", "3 Feb", false, "task1"),
@@ -28,16 +28,17 @@ class NotificationViewModel(private val sharedPreferences: SharedPreferences) : 
     }
 
     fun showAllNotifications() {
-        _notifications.value = allNotifications
+        _notifications.value = allNotifications.toList()
     }
 
     fun showUnreadNotifications() {
         _notifications.value = allNotifications.filter { !it.isRead }
     }
-
     fun markAllAsRead() {
-        val updated = allNotifications.map { it.copy(isRead = true) }
-        _notifications.value = updated
+        // Update the original list
+        allNotifications = allNotifications.map { it.copy(isRead = true) }.toMutableList()
+        // Update LiveData
+        _notifications.value = allNotifications.toList()
     }
 
     fun showMarkAllDialog() {
@@ -60,24 +61,24 @@ class NotificationViewModel(private val sharedPreferences: SharedPreferences) : 
     fun hasUnreadNotifications(): Boolean {
         return _notifications.value?.any { !it.isRead } ?: false
     }
+
     fun getDontAskAgain(): Boolean {
         return sharedPreferences.getBoolean("dont_ask_again", false)
     }
 
     fun toggleNotificationReadState(notification: Notification) {
-        // Create a copy of the notification with the toggled read state
         val updatedNotification = notification.copy(isRead = !notification.isRead)
 
-        // Safely update the list
-        val updatedList = _notifications.value?.toMutableList() ?: mutableListOf()
-        updatedList.apply {
-            val index = indexOfFirst { it.id == notification.id } // Find the notification by its id
-            if (index != -1) {
-                this[index] = updatedNotification // Replace the old notification with the updated one
-            }
+        // Update in allNotifications
+        val index = allNotifications.indexOfFirst { it.id == notification.id }
+        if (index != -1) {
+            allNotifications[index] = updatedNotification
         }
 
-        // Update the MutableLiveData with the new list
-        _notifications.value = updatedList
+        // Update LiveData
+        _notifications.value = _notifications.value?.map {
+            if (it.id == notification.id) updatedNotification else it
+        }
     }
+
 }

@@ -9,8 +9,7 @@ import com.example.notifications.ui.theme.models.Notification
 
 class NotificationsAdapter(
     private var notifications: List<Notification>,
-    private val onItemClick: (Notification) -> Unit,
-    private val onTickClick: (Notification) -> Unit // Add a callback for the tick click event
+    private val onItemClick: (Notification) -> Unit
 ) : RecyclerView.Adapter<NotificationsAdapter.NotificationViewHolder>() {
 
     inner class NotificationViewHolder(private val binding: ItemNotificationBinding) :
@@ -32,19 +31,6 @@ class NotificationsAdapter(
                     notificationTitle.compoundDrawablePadding = 8
                     notificationTitle.alpha = 1f
                     notificationDate.alpha = 1f
-                }
-
-                // Set up the tick icon for marking notifications as read
-                val tickIcon = binding.tickIcon
-                if (notification.isRead) {
-                    tickIcon.setImageResource(R.drawable.ic_check) // Set the checked tick icon
-                } else {
-                    tickIcon.setImageResource(R.drawable.ic_check) // Set the unchecked tick icon
-                }
-
-                // Handle tick icon click
-                tickIcon.setOnClickListener {
-                    onTickClick(notification) // Call the callback when tick is clicked
                 }
 
                 // Handle notification click
