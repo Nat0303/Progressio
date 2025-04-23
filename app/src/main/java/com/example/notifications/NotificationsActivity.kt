@@ -30,7 +30,10 @@ class NotificationsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Initialize SharedPreferences
-        sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE) // Initialize sharedPreferences here
+        sharedPreferences = getSharedPreferences(
+            "app_preferences",
+            MODE_PRIVATE
+        ) // Initialize sharedPreferences here
 
         // Create ViewModel using ViewModelFactory
         val factory = NotificationViewModelFactory(sharedPreferences)
@@ -67,13 +70,8 @@ class NotificationsActivity : AppCompatActivity() {
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         val markAllItem = menu?.findItem(R.id.action_mark_all_read)
-        val currentTab = binding.tabLayout.selectedTabPosition
-
-        val shouldShow = currentTab == 1 &&
-                !viewModel.getDontAskAgain() &&
-                viewModel.hasUnreadNotifications()
-
-        markAllItem?.isVisible = shouldShow
+        // Show only if there are unread notifications
+        markAllItem?.isVisible = viewModel.hasUnreadNotifications()
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -83,10 +81,18 @@ class NotificationsActivity : AppCompatActivity() {
                 finish()
                 true
             }
+
             R.id.action_mark_all_read -> {
-                viewModel.showMarkAllDialog()
+                if (viewModel.getDontAskAgain()) {
+                    // Directly mark all as read if "Don't ask again" is checked
+                    viewModel.markAllAsRead()
+                } else {
+                    // Show confirmation dialog otherwise
+                    viewModel.showMarkAllDialog()
+                }
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -94,14 +100,12 @@ class NotificationsActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         binding.notificationsRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Initialize the adapter with both item click and tick click handlers
-        adapter = NotificationsAdapter(emptyList(), { notification ->
+        // Initialize the adapter with click handler
+        adapter = NotificationsAdapter(emptyList()) { notification ->
             // Handle notification click
-            // For example, navigate to a details screen or show more info
-        }, { notification ->
-            // Handle tick click, mark notification as read/unread
             viewModel.toggleNotificationReadState(notification)
-        })
+            refreshViews() // Refresh after state change
+        }
 
         binding.notificationsRecyclerView.adapter = adapter
     }
@@ -138,7 +142,6 @@ class NotificationsActivity : AppCompatActivity() {
     }
 
 
-
     private fun observeViewModel() {
         viewModel.notifications.observe(this) {
             adapter.updateNotifications(it)
@@ -171,10 +174,20 @@ class NotificationsActivity : AppCompatActivity() {
             val dontAskAgain = dontAskAgainCheckbox.isChecked
             viewModel.setDontAskAgain(dontAskAgain)
             viewModel.markAllAsRead()
+            refreshViews()
             dialog.dismiss()
         }
 
-        dialog.show()
     }
 
-}
+        private fun refreshViews() {
+            when (binding.tabLayout.selectedTabPosition) {
+                0 -> viewModel.showAllNotifications()
+                1 -> viewModel.showUnreadNotifications()
+            }
+            invalidateOptionsMenu()
+        }
+
+    }
+
+

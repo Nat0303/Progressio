@@ -25,17 +25,6 @@
             app:titleCentered="true"
             app:titleTextColor="@android:color/black">
 
-            <!-- Mark all read button inside toolbar -->
-            <ImageButton
-                android:id="@+id/action_mark_all_read"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_check"
-                android:contentDescription="@string/mark_all_read"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="12dp"
-                android:scaleType="centerInside"/>
         </com.google.android.material.appbar.MaterialToolbar>
 
         <!-- Tabs -->
